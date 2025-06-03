@@ -3,6 +3,8 @@ package com.ConsultasMedicas.app.entidades;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "medicamento")
+
 public class Medicamento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

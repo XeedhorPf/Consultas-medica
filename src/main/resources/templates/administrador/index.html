@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+	<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="es">
 <head>
     <meta charset="UTF-8">
@@ -30,7 +30,7 @@
                     
                     <ul class="nav flex-column mt-3">
                         <li class="nav-item">
-                            <a class="nav-link active" th:href="@{/admin/dashboard}">
+                            <a class="nav-link active" th:href="@{/administrador}">
                                 <i class="fas fa-tachometer-alt"></i>
                                 Dashboard
                             </a>
@@ -100,9 +100,9 @@
                                     <i class="fas fa-users"></i>
                                 </div>
                             </div>
-                            <a th:href="@{/admin/usuarios}" class="stat-link">
+                            <a th:href="@{/administrador/usuarios}" class="stat-link">
                                 Ver todos <i class="fas fa-arrow-right ms-1"></i>
-                            </a>
+                            </a>	
                         </div>
                     </div>
                     
@@ -117,7 +117,7 @@
                                     <i class="fas fa-pills"></i>
                                 </div>
                             </div>
-                            <a th:href="@{/admin/medicamentos}" class="stat-link">
+                            <a th:href="@{/administrador/medicamentos}" class="stat-link">
                                 Ver todos <i class="fas fa-arrow-right ms-1"></i>
                             </a>
                         </div>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{administrador/fragments/head :: head}"></head>
+<body>
+    <div th:replace="~{administrador/fragments/sidebar :: sidebar}"></div>
+
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <h2 class="my-4" th:text="${medicamento.id} ? 'Editar Medicamento' : 'Nuevo Medicamento'"></h2>
+        
+        <form th:action="@{/administrador/medicamentos/guardar}" th:object="${medicamento}" method="post">
+            <input type="hidden" th:field="*{id}"/>
+            
+            <div class="mb-3">
+                <label class="form-label">Nombre</label>
+                <input type="text" class="form-control" th:field="*{nombre}" required>
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label">Dosis</label>
+                <input type="text" class="form-control" th:field="*{dosis}" required>
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label">Indicaciones</label>
+                <textarea class="form-control" th:field="*{indicaciones}" rows="3" required></textarea>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            <a th:href="@{/administrador/medicamentos}" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </main>
+</body>
+</html>

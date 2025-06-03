@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{administrador/fragments/head :: head}"></head>
+<body>
+    <div th:replace="~{administrador/fragments/sidebar :: sidebar}"></div>
+
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <h2 class="my-4">Gestión de Medicamentos</h2>
+        
+        <!-- Mensajes Flash -->
+        <div class="alert alert-success" th:if="${mensaje}" th:text="${mensaje}"></div>
+
+        <!-- Tabla -->
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Dosis</th>
+                    <th>Indicaciones</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="medicamento : ${medicamentos}">
+                    <td th:text="${medicamento.id}"></td>
+                    <td th:text="${medicamento.nombre}"></td>
+                    <td th:text="${medicamento.dosis}"></td>
+                    <td th:text="${medicamento.indicaciones}"></td>
+                    <td>
+                        <a th:href="@{/administrador/medicamentos/editar/{id}(id=${medicamento.id})}" 
+                           class="btn btn-sm btn-primary">Editar</a>
+                        <a th:href="@{/administrador/medicamentos/eliminar/{id}(id=${medicamento.id})}" 
+                           class="btn btn-sm btn-danger"
+                           onclick="return confirm('¿Eliminar este medicamento?')">Eliminar</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <a th:href="@{/administrador/medicamentos/nuevo}" class="btn btn-success">Nuevo Medicamento</a>
+    </main>
+</body>
+</html>
