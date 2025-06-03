@@ -1,0 +1,59 @@
+<div th:fragment="scripts">
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- DataTables JS -->
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+    
+    <!-- Inicialización de DataTable -->
+    <script>
+        $(document).ready(function() {
+            $('#usuariosTable').DataTable({
+                responsive: true,
+                dom: '<"top"lf>rt<"bottom"ipB>',
+                buttons: [
+                    {
+                        extend: 'copy',
+                        text: '<i class="fas fa-copy"></i> Copiar',
+                        className: 'btn btn-sm btn-outline-secondary'
+                    },
+                    {
+                        extend: 'excel',
+                        text: '<i class="fas fa-file-excel"></i> Excel',
+                        className: 'btn btn-sm btn-outline-success'
+                    },
+                    {
+                        extend: 'pdf',
+                        text: '<i class="fas fa-file-pdf"></i> PDF',
+                        className: 'btn btn-sm btn-outline-danger'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fas fa-print"></i> Imprimir',
+                        className: 'btn btn-sm btn-outline-info'
+                    }
+                ],
+                language: {
+                    url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
+                },
+                columnDefs: [
+                    { orderable: false, targets: [5] } // Deshabilitar ordenación para columna de acciones
+                ]
+            });
+           
+            // Activar elemento del menú correspondiente
+            const currentPage = window.location.pathname.split('/').pop() || 'dashboard';
+            document.querySelectorAll('.nav-link').forEach(link => {
+                if (link.getAttribute('href').includes(currentPage)) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</div>

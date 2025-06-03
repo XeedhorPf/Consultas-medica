@@ -1,0 +1,348 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Paciente | Consultas Médicas</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome para íconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Paleta de colores médica profesional */
+            --primary-blue: #2C5282;
+            --primary-blue-medium: #3182CE;
+            --primary-blue-light: #63B3ED;
+            --secondary-green: #2F855A;
+            --secondary-green-medium: #48BB78;
+            --secondary-green-light: #9AE6B4;
+            --text-dark: #1A202C;
+            --text-medium: #4A5568;
+            --border-light: #E2E8F0;
+            --bg-light: #F7FAFC;
+            --bg-white: #FFFFFF;
+            --alert-red: #E53E3E;
+            --warning-yellow: #F6E05E;
+            --premium-purple: #805AD5;
+            
+            /* Sombras suaves */
+            --shadow-sm: 0 2px 4px rgba(45, 82, 130, 0.08);
+            --shadow-md: 0 4px 12px rgba(45, 82, 130, 0.12);
+            --shadow-lg: 0 8px 24px rgba(45, 82, 130, 0.15);
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+            padding: 2rem;
+        }
+        
+        /* Header principal */
+        .patient-header {
+            background: var(--bg-white);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .patient-header h1 {
+            color: var(--primary-blue);
+            font-weight: 700;
+            margin: 0;
+            font-size: 1.75rem;
+        }
+        
+        .patient-header h1 i {
+            margin-right: 0.75rem;
+            color: var(--secondary-green);
+        }
+        
+        .logout-btn {
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        .logout-btn:hover {
+            background: var(--primary-blue-medium);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            color: white;
+        }
+        
+        .logout-btn i {
+            margin-right: 0.5rem;
+        }
+        
+        /* Secciones principales */
+        .patient-sections {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .patient-card {
+            background: var(--bg-white);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-light);
+            transition: all 0.3s ease;
+        }
+        
+        .patient-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--primary-blue-light);
+        }
+        
+        .patient-card h2 {
+            color: var(--primary-blue);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .patient-card h2 i {
+            margin-right: 0.75rem;
+            color: var(--secondary-green-medium);
+        }
+        
+        /* Botones de acción */
+        .action-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.875rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            margin-top: 1rem;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .primary-btn {
+            background: var(--primary-blue);
+            color: white;
+            border: 2px solid var(--primary-blue);
+        }
+        
+        .primary-btn:hover {
+            background: var(--primary-blue-medium);
+            border-color: var(--primary-blue-medium);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .secondary-btn {
+            background: var(--bg-white);
+            color: var(--primary-blue);
+            border: 2px solid var(--primary-blue-light);
+        }
+        
+        .secondary-btn:hover {
+            background: var(--primary-blue-light);
+            color: white;
+            border-color: var(--primary-blue-light);
+        }
+        
+        /* Lista de citas */
+        .appointment-list {
+            list-style: none;
+            margin-top: 1.5rem;
+        }
+        
+        .appointment-item {
+            padding: 1rem;
+            border-radius: 12px;
+            background: var(--bg-light);
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--primary-blue-light);
+        }
+        
+        .appointment-item h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+        
+        .appointment-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.9rem;
+            color: var(--text-medium);
+            margin-bottom: 0.5rem;
+        }
+        
+        .appointment-status {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .status-confirmed {
+            background: var(--secondary-green-light);
+            color: var(--secondary-green);
+        }
+        
+        .status-pending {
+            background: #FEFCBF;
+            color: #975A16;
+        }
+        
+        .status-canceled {
+            background: #FED7D7;
+            color: var(--alert-red);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+            
+            .patient-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+                padding: 1.5rem;
+            }
+            
+            .patient-sections {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Animaciones */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header principal -->
+    <header class="patient-header fade-in">
+        <h1><i class="fas fa-user-injured"></i> Panel del Paciente</h1>
+        <a th:href="@{/}" class="logout-btn">
+            <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+        </a>
+    </header>
+    
+    <!-- Secciones principales -->
+    <div class="patient-sections">
+        <!-- Sección de agendar citas -->
+        <section class="patient-card fade-in" style="animation-delay: 0.1s">
+            <h2><i class="fas fa-calendar-plus"></i> Agendar Nueva Cita</h2>
+            <p>Programa una nueva consulta con nuestros especialistas médicos.</p>
+            <a href="#" class="action-btn primary-btn">
+                <i class="fas fa-plus-circle me-2"></i> Solicitar Cita
+            </a>
+        </section>
+        
+        <!-- Sección de historial médico -->
+        <section class="patient-card fade-in" style="animation-delay: 0.2s">
+            <h2><i class="fas fa-file-medical"></i> Mi Historial Médico</h2>
+            <p>Consulta tus diagnósticos, tratamientos y resultados de exámenes.</p>
+            <a href="#" class="action-btn secondary-btn">
+                <i class="fas fa-search me-2"></i> Ver Historial
+            </a>
+        </section>
+        
+        <!-- Sección de citas programadas -->
+        <section class="patient-card fade-in" style="animation-delay: 0.3s">
+            <h2><i class="fas fa-calendar-check"></i> Mis Citas Programadas</h2>
+            
+            <ul class="appointment-list">
+                <li class="appointment-item">
+                    <h3>Consulta General</h3>
+                    <div class="appointment-meta">
+                        <span><i class="far fa-calendar me-1"></i> 15 Jun 2025</span>
+                        <span><i class="far fa-clock me-1"></i> 10:30 AM</span>
+                    </div>
+                    <div class="appointment-meta">
+                        <span><i class="fas fa-user-md me-1"></i> Dra. Laura Fernández</span>
+                    </div>
+                    <span class="appointment-status status-confirmed">
+                        <i class="fas fa-check-circle me-1"></i> Confirmada
+                    </span>
+                </li>
+                
+                <li class="appointment-item">
+                    <h3>Control Cardiológico</h3>
+                    <div class="appointment-meta">
+                        <span><i class="far fa-calendar me-1"></i> 22 Jun 2025</span>
+                        <span><i class="far fa-clock me-1"></i> 03:15 PM</span>
+                    </div>
+                    <div class="appointment-meta">
+                        <span><i class="fas fa-user-md me-1"></i> Dr. Carlos Mendoza</span>
+                    </div>
+                    <span class="appointment-status status-pending">
+                        <i class="fas fa-hourglass-half me-1"></i> Pendiente
+                    </span>
+                </li>
+            </ul>
+            
+            <a href="#" class="action-btn secondary-btn">
+                <i class="fas fa-list me-2"></i> Ver Todas las Citas
+            </a>
+        </section>
+    </div>
+    
+    <!-- Sección adicional de información -->
+    <section class="patient-card fade-in" style="animation-delay: 0.4s">
+        <h2><i class="fas fa-info-circle"></i> Información Importante</h2>
+        <div class="alert alert-primary" style="background-color: var(--primary-blue-light); border-color: var(--primary-blue); color: var(--text-dark);">
+            <i class="fas fa-exclamation-triangle me-2"></i> Recuerda llegar 15 minutos antes de tu cita programada.
+        </div>
+        <div class="alert alert-success" style="background-color: var(--secondary-green-light); border-color: var(--secondary-green); color: var(--text-dark);">
+            <i class="fas fa-syringe me-2"></i> Tu próxima vacunación está programada para el 10 de Julio.
+        </div>
+    </section>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

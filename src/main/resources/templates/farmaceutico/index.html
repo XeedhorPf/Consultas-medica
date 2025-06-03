@@ -1,0 +1,631 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Farmacéutico | Gestión de Medicamentos</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome para íconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Paleta de colores farmacéutica profesional */
+            --primary-blue: #2C5282;
+            --primary-blue-medium: #3182CE;
+            --primary-blue-light: #63B3ED;
+            --secondary-green: #2F855A;
+            --secondary-green-medium: #48BB78;
+            --secondary-green-light: #9AE6B4;
+            --text-dark: #1A202C;
+            --text-medium: #4A5568;
+            --border-light: #E2E8F0;
+            --bg-light: #F7FAFC;
+            --bg-white: #FFFFFF;
+            --alert-red: #E53E3E;
+            --warning-yellow: #F6E05E;
+            --pharma-purple: #805AD5;
+            
+            /* Sombras suaves */
+            --shadow-sm: 0 2px 4px rgba(45, 82, 130, 0.08);
+            --shadow-md: 0 4px 12px rgba(45, 82, 130, 0.12);
+            --shadow-lg: 0 8px 24px rgba(45, 82, 130, 0.15);
+        }
+        
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+        
+        /* Sidebar estilo farmacéutico */
+        .sidebar {
+            background: linear-gradient(135deg, var(--pharma-purple) 0%, #5c3d9e 100%);
+            min-height: 100vh;
+            color: white;
+            box-shadow: var(--shadow-lg);
+            border-radius: 0 20px 20px 0;
+        }
+        
+        .sidebar-header {
+            padding: 2rem 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+        
+        .sidebar-header .logo-icon {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 16px;
+            padding: 1rem;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+        
+        .sidebar-header h4 {
+            font-weight: 600;
+            margin: 0;
+            font-size: 1.25rem;
+        }
+        
+        .sidebar .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            padding: 0.875rem 1.5rem;
+            margin: 0.25rem 1rem;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+        }
+        
+        .sidebar .nav-link:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateX(4px);
+        }
+        
+        .sidebar .nav-link.active {
+            color: white;
+            background: linear-gradient(135deg, #9F7AEA, var(--pharma-purple));
+            box-shadow: 0 4px 12px rgba(159, 122, 234, 0.3);
+        }
+        
+        .sidebar .nav-link i {
+            width: 20px;
+            margin-right: 0.75rem;
+        }
+        
+        /* Contenido principal */
+        .main-content {
+            padding: 2rem;
+            margin-left: 0;
+        }
+        
+        /* Header superior estilo farmacéutico */
+        .top-header {
+            background: var(--bg-white);
+            padding: 1.5rem 2rem;
+            border-radius: 16px;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .top-header h1 {
+            color: var(--pharma-purple);
+            font-weight: 700;
+            margin: 0;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .top-header h1 i {
+            margin-right: 1rem;
+            color: var(--pharma-purple);
+        }
+        
+        /* Botón de cerrar sesión */
+        .logout-btn {
+            background: var(--pharma-purple);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .logout-btn:hover {
+            background: #9F7AEA;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .logout-btn i {
+            margin-right: 0.5rem;
+        }
+        
+        /* Tarjeta de bienvenida */
+        .welcome-card {
+            background: linear-gradient(135deg, var(--pharma-purple) 0%, var(--primary-blue) 100%);
+            color: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 2.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .welcome-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        
+        .welcome-card h2 {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            font-size: 2rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .welcome-card p {
+            font-size: 1.125rem;
+            opacity: 0.9;
+            max-width: 600px;
+        }
+        
+        .welcome-icon {
+            opacity: 0.3;
+            font-size: 8rem !important;
+            position: absolute;
+            right: 2rem;
+            bottom: 1rem;
+        }
+        
+        /* Tarjetas de funciones */
+        .function-card {
+            background: var(--bg-white);
+            border: 1px solid var(--border-light);
+            border-radius: 16px;
+            padding: 1.75rem;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-sm);
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .function-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+            border-color: #9F7AEA;
+        }
+        
+        .function-card h3 {
+            color: var(--pharma-purple);
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .function-card h3 i {
+            margin-right: 0.75rem;
+            color: var(--pharma-purple);
+        }
+        
+        .function-card p {
+            color: var(--text-medium);
+            margin-bottom: 1.5rem;
+        }
+        
+        .function-card .btn {
+            background: #9F7AEA;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .function-card .btn:hover {
+            background: var(--pharma-purple);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        /* Badges */
+        .badge {
+            font-weight: 500;
+            padding: 0.5rem 0.875rem;
+            border-radius: 8px;
+            font-size: 0.75rem;
+        }
+        
+        .badge.bg-success {
+            background: var(--secondary-green) !important;
+        }
+        
+        .badge.bg-warning {
+            background: #FB923C !important;
+        }
+        
+        .badge.bg-danger {
+            background: var(--alert-red) !important;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                border-radius: 0;
+                min-height: auto;
+            }
+            
+            .main-content {
+                padding: 1rem;
+            }
+            
+            .welcome-card {
+                padding: 1.5rem;
+            }
+            
+            .welcome-card h2 {
+                font-size: 1.5rem;
+            }
+            
+            .welcome-icon {
+                font-size: 5rem !important;
+                right: 1rem;
+                bottom: 0.5rem;
+            }
+        }
+        
+        /* Animaciones */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        /* Estilos específicos para tabla de medicamentos */
+        .medication-table th {
+            background-color: var(--pharma-purple);
+            color: white;
+        }
+
+        .medication-badge {
+            background-color: #EDF2F7;
+            color: var(--text-dark);
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar farmacéutico -->
+            <div class="col-md-3 col-lg-2 d-md-block sidebar collapse">
+                <div class="position-sticky">
+                    <div class="sidebar-header">
+                        <div class="logo-icon">
+                            <i class="fas fa-prescription-bottle-alt fa-2x"></i>
+                        </div>
+                        <h4>Farmacéutico</h4>
+                    </div>
+                    
+                    <ul class="nav flex-column mt-3">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">
+                                <i class="fas fa-tachometer-alt"></i>
+                                Panel Principal
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="fas fa-clipboard-list"></i>
+                                Recetas Pendientes
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="fas fa-pills"></i>
+                                Inventario
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="fas fa-box-open"></i>
+                                Entregas
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="fas fa-search"></i>
+                                Buscar Medicamentos
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Main Content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 main-content">
+                <!-- Header superior -->
+                <div class="top-header fade-in-up">
+                    <h1>
+                        <i class="fas fa-prescription-bottle-alt"></i>
+                        Panel Farmacéutico: Entrega de Medicamentos
+                    </h1>
+                    <a th:href="@{/}" class="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Cerrar sesión
+                    </a>
+                </div>
+                
+                <!-- Tarjeta de bienvenida -->
+                <div class="welcome-card fade-in-up">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h2>
+                                <i class="fas fa-pills me-3"></i>
+                                ¡Bienvenido, <span th:text="${nombreUsuario}">Farmacéutico</span>!
+                            </h2>
+                            <p class="mb-0">
+                                Desde este panel podrás gestionar la entrega de medicamentos, revisar recetas médicas, controlar el inventario y registrar entregas a pacientes.
+                            </p>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <i class="fas fa-prescription-bottle-alt welcome-icon"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Funciones principales -->
+                <div class="row mb-4">
+                    <div class="col-md-6 col-lg-3 mb-4">
+                        <div class="function-card fade-in-up" style="animation-delay: 0.1s">
+                            <h3>
+                                <i class="fas fa-clipboard-list"></i>
+                                Recetas Pendientes
+                            </h3>
+                            <p>Revisa y procesa las recetas médicas pendientes de entrega.</p>
+                            <a href="#" class="btn">Ver Recetas</a>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 col-lg-3 mb-4">
+                        <div class="function-card fade-in-up" style="animation-delay: 0.2s">
+                            <h3>
+                                <i class="fas fa-pills"></i>
+                                Control de Inventario
+                            </h3>
+                            <p>Gestiona el stock de medicamentos y alertas de bajo inventario.</p>
+                            <a href="#" class="btn">Ver Inventario</a>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 col-lg-3 mb-4">
+                        <div class="function-card fade-in-up" style="animation-delay: 0.3s">
+                            <h3>
+                                <i class="fas fa-box-open"></i>
+                                Registrar Entrega
+                            </h3>
+                            <p>Registra la entrega de medicamentos a pacientes.</p>
+                            <a href="#" class="btn">Nueva Entrega</a>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 col-lg-3 mb-4">
+                        <div class="function-card fade-in-up" style="animation-delay: 0.4s">
+                            <h3>
+                                <i class="fas fa-search"></i>
+                                Buscar Medicamento
+                            </h3>
+                            <p>Consulta disponibilidad y detalles de medicamentos.</p>
+                            <a href="#" class="btn">Buscar</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Sección de recetas pendientes -->
+                <div class="card fade-in-up mb-4" style="animation-delay: 0.5s">
+                    <div class="card-header bg-white border-bottom">
+                        <h5 class="mb-0">
+                            <i class="fas fa-clipboard-list me-2"></i>
+                            Recetas Pendientes de Entrega
+                        </h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0 medication-table">
+                                <thead>
+                                    <tr>
+                                        <th>N° Receta</th>
+                                        <th>Paciente</th>
+                                        <th>Médico</th>
+                                        <th>Medicamentos</th>
+                                        <th>Fecha</th>
+                                        <th>Estado</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>#RX-2023-0015</td>
+                                        <td>Juan Pérez González</td>
+                                        <td>Dra. María López</td>
+                                        <td>
+                                            <span class="medication-badge">Paracetamol 500mg</span>
+                                            <span class="medication-badge">Ibuprofeno 400mg</span>
+                                        </td>
+                                        <td>Hoy, 09:00 AM</td>
+                                        <td><span class="badge bg-warning">Pendiente</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary me-1">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-success">
+                                                <i class="fas fa-check"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>#RX-2023-0016</td>
+                                        <td>Ana García Ruiz</td>
+                                        <td>Dr. Carlos Mendoza</td>
+                                        <td>
+                                            <span class="medication-badge">Amoxicilina 500mg</span>
+                                        </td>
+                                        <td>Hoy, 10:30 AM</td>
+                                        <td><span class="badge bg-warning">Pendiente</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary me-1">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-success">
+                                                <i class="fas fa-check"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>#RX-2023-0017</td>
+                                        <td>Pedro Martínez</td>
+                                        <td>Dra. Laura Fernández</td>
+                                        <td>
+                                            <span class="medication-badge">Omeprazol 20mg</span>
+                                            <span class="medication-badge">Loratadina 10mg</span>
+                                        </td>
+                                        <td>Ayer, 04:15 PM</td>
+                                        <td><span class="badge bg-danger">Vencida</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary me-1">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-secondary">
+                                                <i class="fas fa-undo"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sección de inventario crítico -->
+                <div class="card fade-in-up" style="animation-delay: 0.6s">
+                    <div class="card-header bg-white border-bottom">
+                        <h5 class="mb-0">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            Inventario Crítico (Stock bajo)
+                        </h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Medicamento</th>
+                                        <th>Presentación</th>
+                                        <th>Stock Actual</th>
+                                        <th>Stock Mínimo</th>
+                                        <th>Última Entrada</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Ibuprofeno</td>
+                                        <td>400mg x 20 comp</td>
+                                        <td>12</td>
+                                        <td>30</td>
+                                        <td>05/06/2023</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary">
+                                                <i class="fas fa-plus"></i> Solicitar
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Amoxicilina</td>
+                                        <td>500mg x 12 caps</td>
+                                        <td>8</td>
+                                        <td>25</td>
+                                        <td>03/06/2023</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary">
+                                                <i class="fas fa-plus"></i> Solicitar
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Activar elemento del menú correspondiente
+            const currentPage = window.location.pathname.split('/').pop() || 'dashboard';
+            document.querySelectorAll('.nav-link').forEach(link => {
+                if (link.getAttribute('href').includes(currentPage)) {
+                    link.classList.add('active');
+                }
+            });
+            
+            // Inicializar tooltips
+            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        });
+    </script>
+</body>
+</html>

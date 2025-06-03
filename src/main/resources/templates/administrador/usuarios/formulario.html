@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{administrador/fragments/head :: head}"></head>
+<body>
+    <div th:replace="~{administrador/fragments/sidebar :: sidebar}"></div>
+
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <h2 class="my-4" th:text="${usuario.id} ? 'Editar Usuario' : 'Nuevo Usuario'"></h2>
+        
+        <!-- Formulario para crear/editar -->
+        <form th:action="@{/administrador/usuarios/guardar}" th:object="${usuario}" method="post">
+            <input type="hidden" th:field="*{id}"/>
+            
+            <div class="mb-3">
+                <label class="form-label">Nombre</label>
+                <input type="text" class="form-control" th:field="*{nombre}" required>
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label">Correo</label>
+                <input type="email" class="form-control" th:field="*{correo}" required>
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label">Contraseña</label>
+                <input type="password" class="form-control" th:field="*{contraseña}" required>
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label">Rol</label>
+                <select class="form-select" th:field="*{rol}" required>
+                    <option th:each="rol : ${roles}" th:value="${rol}" th:text="${rol}"></option>
+                </select>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            <a th:href="@{/administrador/usuarios}" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </main>
+</body>
+</html>

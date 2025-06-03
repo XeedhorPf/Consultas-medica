@@ -1,0 +1,243 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Asistente | Consultas Médicas</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome para íconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+	
+	<link rel="stylesheet" th:href="@{/css/asistentestyle.css}">
+
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar médico -->
+            <div class="col-md-3 col-lg-2 d-md-block sidebar collapse">
+                <div class="position-sticky">
+                    <div class="sidebar-header">
+                        <div class="logo-icon">
+                            <i class="fas fa-user-nurse fa-2x"></i>
+                        </div>
+                        <h4>Asistente Médico</h4>
+                    </div>
+                    
+                    <ul class="nav flex-column mt-3">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">
+                                <i class="fas fa-tachometer-alt"></i>
+                                Panel Principal
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link"  th:href="@{/agendar-citas}">
+                                <i class="fas fa-calendar-plus"></i>
+                                Agendar Citas
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="fas fa-calendar-check"></i>
+                                Confirmar Citas
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="fas fa-search"></i>
+                                Buscar Pacientes
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="fas fa-file-alt"></i>
+                                Reportes
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Main Content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 main-content">
+                <!-- Header superior -->
+                <div class="top-header fade-in-up">
+                    <h1>
+                        <i class="fas fa-user-nurse"></i>
+                        Panel de Asistente Médico
+                    </h1>
+                    <a th:href="@{/}" class="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Cerrar sesión
+                    </a>
+                </div>
+                
+                <!-- Tarjeta de bienvenida -->
+                <div class="welcome-card fade-in-up">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h2>
+                                <i class="fas fa-hand-holding-medical me-3"></i>
+                                ¡Bienvenido, <span th:text="${nombreUsuario}">Asistente</span>!
+                            </h2>
+                            <p class="mb-0">
+                                Desde este panel podrás gestionar las citas médicas, confirmar asistencia y generar reportes diarios para optimizar el flujo de pacientes.
+                            </p>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <i class="fas fa-heartbeat welcome-icon"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Funciones principales -->
+                <div class="row mb-4">
+                    <div class="col-md-6 col-lg-3 mb-4">
+                        <div class="function-card fade-in-up" style="animation-delay: 0.1s">
+                            <h3>
+                                <i class="fas fa-calendar-plus"></i>
+                                Agendar Citas
+                            </h3>
+                            <p>Registra nuevas citas médicas asignando pacientes, doctores y horarios disponibles.</p>
+                            <a href="#" class="btn">Acceder</a>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 col-lg-3 mb-4">
+                        <div class="function-card fade-in-up" style="animation-delay: 0.2s">
+                            <h3>
+                                <i class="fas fa-calendar-check"></i>
+                                Confirmar Citas
+                            </h3>
+                            <p>Gestiona las confirmaciones de citas pendientes y notifica a los pacientes.</p>
+                            <a href="#" class="btn">Acceder</a>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 col-lg-3 mb-4">
+                        <div class="function-card fade-in-up" style="animation-delay: 0.3s">
+                            <h3>
+                                <i class="fas fa-search"></i>
+                                Buscar Pacientes
+                            </h3>
+                            <p>Consulta y edita la información de los pacientes registrados en el sistema.</p>
+                            <a href="#" class="btn">Acceder</a>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 col-lg-3 mb-4">
+                        <div class="function-card fade-in-up" style="animation-delay: 0.4s">
+                            <h3>
+                                <i class="fas fa-file-alt"></i>
+                                Reportes Diarios
+                            </h3>
+                            <p>Genera reportes de citas agendadas, confirmadas y canceladas.</p>
+                            <a href="#" class="btn">Acceder</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Sección de citas recientes -->
+                <div class="data-table-card fade-in-up" style="animation-delay: 0.5s">
+                    <div class="card-header">
+                        <h5>
+                            <i class="fas fa-calendar-day me-2"></i>
+                            Citas para Hoy
+                        </h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Hora</th>
+                                        <th>Paciente</th>
+                                        <th>Doctor</th>
+                                        <th>Motivo</th>
+                                        <th>Estado</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>09:00 AM</td>
+                                        <td>Juan Pérez González</td>
+                                        <td>Dra. María López</td>
+                                        <td>Consulta general</td>
+                                        <td><span class="badge bg-success">Confirmada</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary me-1">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-secondary">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>10:30 AM</td>
+                                        <td>Ana García Ruiz</td>
+                                        <td>Dr. Carlos Mendoza</td>
+                                        <td>Control postoperatorio</td>
+                                        <td><span class="badge bg-success">Confirmada</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary me-1">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-secondary">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>11:45 AM</td>
+                                        <td>Pedro Martínez</td>
+                                        <td>Dra. Laura Fernández</td>
+                                        <td>Examen de laboratorio</td>
+                                        <td><span class="badge bg-warning">Pendiente</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary me-1">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-secondary">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Activar elemento del menú correspondiente
+            const currentPage = window.location.pathname.split('/').pop() || 'dashboard';
+            document.querySelectorAll('.nav-link').forEach(link => {
+                if (link.getAttribute('href').includes(currentPage)) {
+                    link.classList.add('active');
+                }
+            });
+            
+            // Inicializar tooltips
+            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        });
+    </script>
+</body>
+</html>
