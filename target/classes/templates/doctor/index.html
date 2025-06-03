@@ -1,0 +1,552 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Doctor | Consultas Médicas</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome para íconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Paleta de colores médica profesional */
+            --primary-blue: #2C5282;
+            --primary-blue-medium: #3182CE;
+            --primary-blue-light: #63B3ED;
+            --secondary-green: #2F855A;
+            --secondary-green-medium: #48BB78;
+            --secondary-green-light: #9AE6B4;
+            --text-dark: #1A202C;
+            --text-medium: #4A5568;
+            --border-light: #E2E8F0;
+            --bg-light: #F7FAFC;
+            --bg-white: #FFFFFF;
+            --alert-red: #E53E3E;
+            --warning-yellow: #F6E05E;
+            --premium-purple: #805AD5;
+            
+            /* Sombras suaves */
+            --shadow-sm: 0 2px 4px rgba(45, 82, 130, 0.08);
+            --shadow-md: 0 4px 12px rgba(45, 82, 130, 0.12);
+            --shadow-lg: 0 8px 24px rgba(45, 82, 130, 0.15);
+        }
+        
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+        
+        /* Sidebar estilo médico */
+        .sidebar {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, #1e3a5f 100%);
+            min-height: 100vh;
+            color: white;
+            box-shadow: var(--shadow-lg);
+            border-radius: 0 20px 20px 0;
+        }
+        
+        .sidebar-header {
+            padding: 2rem 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+        
+        .sidebar-header .logo-icon {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 16px;
+            padding: 1rem;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+        
+        .sidebar-header h4 {
+            font-weight: 600;
+            margin: 0;
+            font-size: 1.25rem;
+        }
+        
+        .sidebar .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            padding: 0.875rem 1.5rem;
+            margin: 0.25rem 1rem;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+        }
+        
+        .sidebar .nav-link:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateX(4px);
+        }
+        
+        .sidebar .nav-link.active {
+            color: white;
+            background: linear-gradient(135deg, var(--primary-blue-light), var(--primary-blue-medium));
+            box-shadow: 0 4px 12px rgba(99, 179, 237, 0.3);
+        }
+        
+        .sidebar .nav-link i {
+            width: 20px;
+            margin-right: 0.75rem;
+        }
+        
+        /* Contenido principal */
+        .main-content {
+            padding: 2rem;
+            margin-left: 0;
+        }
+        
+        /* Header superior estilo médico */
+        .top-header {
+            background: var(--bg-white);
+            padding: 1.5rem 2rem;
+            border-radius: 16px;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .top-header h1 {
+            color: var(--primary-blue);
+            font-weight: 700;
+            margin: 0;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .top-header h1 i {
+            margin-right: 1rem;
+            color: var(--primary-blue-medium);
+        }
+        
+        /* Botón de cerrar sesión médico */
+        .logout-btn {
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .logout-btn:hover {
+            background: var(--primary-blue-medium);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .logout-btn i {
+            margin-right: 0.5rem;
+        }
+        
+        /* Tarjeta de bienvenida médica */
+        .welcome-card {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-green) 100%);
+            color: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 2.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .welcome-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        
+        .welcome-card h2 {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            font-size: 2rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .welcome-card p {
+            font-size: 1.125rem;
+            opacity: 0.9;
+            max-width: 600px;
+        }
+        
+        .welcome-icon {
+            opacity: 0.3;
+            font-size: 8rem !important;
+            position: absolute;
+            right: 2rem;
+            bottom: 1rem;
+        }
+        
+        /* Tarjetas de funciones médicas */
+        .function-card {
+            background: var(--bg-white);
+            border: 1px solid var(--border-light);
+            border-radius: 16px;
+            padding: 1.75rem;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-sm);
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .function-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-blue-light);
+        }
+        
+        .function-card h3 {
+            color: var(--primary-blue);
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .function-card h3 i {
+            margin-right: 0.75rem;
+            color: var(--primary-blue-medium);
+        }
+        
+        .function-card p {
+            color: var(--text-medium);
+            margin-bottom: 1.5rem;
+        }
+        
+        .function-card .btn {
+            background: var(--primary-blue-light);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .function-card .btn:hover {
+            background: var(--primary-blue);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        /* Badges médicos */
+        .badge {
+            font-weight: 500;
+            padding: 0.5rem 0.875rem;
+            border-radius: 8px;
+            font-size: 0.75rem;
+        }
+        
+        .badge.bg-success {
+            background: var(--secondary-green) !important;
+        }
+        
+        .badge.bg-warning {
+            background: #FB923C !important;
+        }
+        
+        .badge.bg-danger {
+            background: var(--alert-red) !important;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                border-radius: 0;
+                min-height: auto;
+            }
+            
+            .main-content {
+                padding: 1rem;
+            }
+            
+            .welcome-card {
+                padding: 1.5rem;
+            }
+            
+            .welcome-card h2 {
+                font-size: 1.5rem;
+            }
+            
+            .welcome-icon {
+                font-size: 5rem !important;
+                right: 1rem;
+                bottom: 0.5rem;
+            }
+        }
+        
+        /* Animaciones */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar médico -->
+            <div class="col-md-3 col-lg-2 d-md-block sidebar collapse">
+                <div class="position-sticky">
+                    <div class="sidebar-header">
+                        <div class="logo-icon">
+                            <i class="fas fa-user-md fa-2x"></i>
+                        </div>
+                        <h4>Doctor</h4>
+                    </div>
+                    
+                    <ul class="nav flex-column mt-3">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">
+                                <i class="fas fa-tachometer-alt"></i>
+                                Panel Principal
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="fas fa-calendar-check"></i>
+                                Mis Consultas
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="fas fa-notes-medical"></i>
+                                Diagnósticos
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="fas fa-prescription-bottle-alt"></i>
+                                Recetas Médicas
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="fas fa-file-medical"></i>
+                                Historiales
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Main Content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 main-content">
+                <!-- Header superior -->
+                <div class="top-header fade-in-up">
+                    <h1>
+                        <i class="fas fa-user-md"></i>
+                        Panel de Doctor: Consultas, Diagnósticos y Recetas
+                    </h1>
+                    <a th:href="@{/}" class="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Cerrar sesión
+                    </a>
+                </div>
+                
+                <!-- Tarjeta de bienvenida -->
+                <div class="welcome-card fade-in-up">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h2>
+                                <i class="fas fa-stethoscope me-3"></i>
+                                ¡Bienvenido, Dr. <span th:text="${nombreUsuario}">Nombre</span>!
+                            </h2>
+                            <p class="mb-0">
+                                Desde este panel podrás gestionar tus consultas médicas, registrar diagnósticos, emitir recetas y revisar historiales clínicos de tus pacientes.
+                            </p>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <i class="fas fa-heartbeat welcome-icon"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Funciones principales -->
+                <div class="row mb-4">
+                    <div class="col-md-6 col-lg-3 mb-4">
+                        <div class="function-card fade-in-up" style="animation-delay: 0.1s">
+                            <h3>
+                                <i class="fas fa-calendar-check"></i>
+                                Consultas del Día
+                            </h3>
+                            <p>Revisa tu agenda de consultas programadas para hoy y los próximos días.</p>
+                            <a href="#" class="btn">Ver Agenda</a>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 col-lg-3 mb-4">
+                        <div class="function-card fade-in-up" style="animation-delay: 0.2s">
+                            <h3>
+                                <i class="fas fa-notes-medical"></i>
+                                Nuevo Diagnóstico
+                            </h3>
+                            <p>Registra diagnósticos médicos completos para tus pacientes.</p>
+                            <a href="#" class="btn">Crear</a>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 col-lg-3 mb-4">
+                        <div class="function-card fade-in-up" style="animation-delay: 0.3s">
+                            <h3>
+                                <i class="fas fa-prescription-bottle-alt"></i>
+                                Emitir Receta
+                            </h3>
+                            <p>Genera recetas médicas personalizadas para tus pacientes.</p>
+                            <a href="#" class="btn">Nueva Receta</a>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 col-lg-3 mb-4">
+                        <div class="function-card fade-in-up" style="animation-delay: 0.4s">
+                            <h3>
+                                <i class="fas fa-file-medical"></i>
+                                Historiales
+                            </h3>
+                            <p>Accede al historial clínico completo de tus pacientes.</p>
+                            <a href="#" class="btn">Buscar</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Sección de consultas recientes -->
+                <div class="data-table-card fade-in-up" style="animation-delay: 0.5s">
+                    <div class="card-header bg-white border-bottom">
+                        <h5 class="mb-0">
+                            <i class="fas fa-calendar-day me-2"></i>
+                            Próximas Consultas
+                        </h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Fecha/Hora</th>
+                                        <th>Paciente</th>
+                                        <th>Tipo</th>
+                                        <th>Motivo</th>
+                                        <th>Estado</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Hoy, 10:00 AM</td>
+                                        <td>Juan Pérez González</td>
+                                        <td>Consulta general</td>
+                                        <td>Control de presión arterial</td>
+                                        <td><span class="badge bg-success">Confirmada</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary me-1">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-secondary">
+                                                <i class="fas fa-notes-medical"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Hoy, 11:30 AM</td>
+                                        <td>Ana García Ruiz</td>
+                                        <td>Seguimiento</td>
+                                        <td>Control postoperatorio</td>
+                                        <td><span class="badge bg-warning">Pendiente</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary me-1">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-secondary">
+                                                <i class="fas fa-notes-medical"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Mañana, 09:00 AM</td>
+                                        <td>Pedro Martínez</td>
+                                        <td>Examen</td>
+                                        <td>Resultados de laboratorio</td>
+                                        <td><span class="badge bg-success">Confirmada</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary me-1">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-secondary">
+                                                <i class="fas fa-notes-medical"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Activar elemento del menú correspondiente
+            const currentPage = window.location.pathname.split('/').pop() || 'dashboard';
+            document.querySelectorAll('.nav-link').forEach(link => {
+                if (link.getAttribute('href').includes(currentPage)) {
+                    link.classList.add('active');
+                }
+            });
+            
+            // Inicializar tooltips
+            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        });
+    </script>
+</body>
+</html>

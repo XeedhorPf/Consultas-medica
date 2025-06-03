@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Sistema de Gestión Médica</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+	<link rel="stylesheet" th:href="@{/css/loginstyles.css}">
+
+</head>
+<body>
+    <div class="login-wrapper">
+        <!-- Tarjeta principal de login -->
+        <div class="login-card">
+            <!-- Parte izquierda: Formulario -->
+            <div class="login-form-section">
+                <div class="brand-header">
+                    <i class="fas fa-heartbeat brand-icon"></i>
+                    <h1 class="brand-title">MediCare</h1>
+                    <p class="brand-subtitle">Sistema de Gestión Médica</p>
+                </div>
+                
+                <div class="form-container">
+                    <h2 class="form-title">Iniciar Sesión</h2>
+                    <p class="form-subtitle">Accede a tu cuenta profesional</p>
+                    
+                    <form th:action="@{/login}" method="post" class="login-form">
+                        <div th:if="${param.error}" class="alert alert-danger custom-alert">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            Correo o contraseña incorrectos
+                        </div>
+
+                        <div class="form-group">
+                            <label for="correo" class="form-label">
+                                <i class="fas fa-envelope"></i>
+                                Correo electrónico
+                            </label>
+                            <input type="email" 
+                                   id="correo" 
+                                   name="correo" 
+                                   required 
+                                   class="form-control custom-input"
+                                   placeholder="usuario@correo.com"/>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="contraseña" class="form-label">
+                                <i class="fas fa-lock"></i>
+                                Contraseña
+                            </label>
+                            <div class="password-input-container">
+                                <input type="password" 
+                                       id="contraseña" 
+                                       name="contraseña" 
+                                       required 
+                                       class="form-control custom-input"
+                                       placeholder="••••••••"/>
+                                <button type="button" class="password-toggle" onclick="togglePassword()">
+                                    <i class="fas fa-eye" id="toggleIcon"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="form-options">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="recordar">
+                                <label class="form-check-label" for="recordar">
+                                    Recordar sesión
+                                </label>
+                            </div>
+                            <a href="#" class="forgot-password">¿No eres usuario? Registrate</a>
+                        </div>
+
+                        <button type="submit" class="btn btn-login">
+                            <i class="fas fa-sign-in-alt"></i>
+                            Ingresar al Sistema
+                        </button>
+                    </form>
+					<div class="text-center mt-3">
+					    <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#credencialesModal">
+					        <i class="fas fa-info-circle"></i> Ver credenciales de prueba
+					    </button>
+					</div>
+
+
+                </div>
+            </div>
+            
+            <!-- Parte derecha: Imagen interna -->
+            <div class="login-image-section">
+                <div class="image-overlay">
+                    <div class="overlay-content">
+                        <h3>Gestión Médica Integral</h3>
+                        <p>Citas • Medicamentos • Pacientes</p>
+                        <div class="features">
+                            <div class="feature-item">
+                                <i class="fas fa-calendar-check"></i>
+                                <span>Gestión de Citas</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-pills"></i>
+                                <span>Control de Medicamentos</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-user-md"></i>
+                                <span>Roles Profesionales</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Imagen externa derecha -->
+        <div class="external-image">
+            <div class="external-image-overlay">
+                <div class="stats">
+                    <div class="stat-item">
+                        <div class="stat-number">24/7</div>
+                        <div class="stat-label">Disponibilidad</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">1000+</div>
+                        <div class="stat-label">Pacientes</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">50+</div>
+                        <div class="stat-label">Doctores</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function togglePassword() {
+            const passwordInput = document.getElementById('contraseña');
+            const toggleIcon = document.getElementById('toggleIcon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            }
+        }
+		
+		function autofill(email, password) {
+		    document.getElementById('correo').value = email;
+		    document.getElementById('contraseña').value = password;
+		    document.getElementById('contraseña').focus();
+
+		    // Cerrar el modal usando Bootstrap
+		    const modal = bootstrap.Modal.getInstance(document.getElementById('credencialesModal'));
+		    if (modal) {
+		        modal.hide();
+		    }
+		}
+
+
+
+        // Animación de entrada
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginCard = document.querySelector('.login-card');
+            const externalImage = document.querySelector('.external-image');
+            
+            setTimeout(() => {
+                loginCard.style.opacity = '1';
+                loginCard.style.transform = 'translateX(0)';
+            }, 100);
+            
+            setTimeout(() => {
+                externalImage.style.opacity = '1';
+                externalImage.style.transform = 'translateX(0)';
+            }, 300);
+        });
+    </script>
+	<div class="modal fade" id="credencialesModal" tabindex="-1" aria-labelledby="credencialesModalLabel" aria-hidden="true">
+	    <div class="modal-dialog modal-dialog-centered">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <h5 class="modal-title" id="credencialesModalLabel"><i class="fas fa-key"></i> Credenciales de prueba</h5>
+	                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+	            </div>
+	            <div class="modal-body">
+	                <div class="credential-list">
+	                    <div class="credential-box" onclick="autofill('admin@consultasmedicas.com', 'password123')">
+	                        <strong>Admin</strong>
+	                        <span>admin@consultasmedicas.com</span>
+	                        <span>password123</span>
+	                    </div>
+	                    <div class="credential-box" onclick="autofill('doctor@consultasmedicas.com', 'password123')">
+	                        <strong>Doctor</strong>
+	                        <span>doctor@consultasmedicas.com</span>
+	                        <span>password123</span>
+	                    </div>
+	                    <div class="credential-box" onclick="autofill('farmaceutico@consultasmedicas.com', 'password123')">
+	                        <strong>Farmacéutico</strong>
+	                        <span>farmaceutico@consultasmedicas.com</span>
+	                        <span>password123</span>
+	                    </div>
+	                    <div class="credential-box" onclick="autofill('asistente@consultasmedicas.com', 'password123')">
+	                        <strong>Asistente</strong>
+	                        <span>asistente@consultasmedicas.com</span>
+	                        <span>password123</span>
+	                    </div>
+	                    <div class="credential-box" onclick="autofill('paciente@consultasmedicas.com', 'password123')">
+	                        <strong>Paciente</strong>
+	                        <span>paciente@consultasmedicas.com</span>
+	                        <span>password123</span>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+
+</body>
+</html>
